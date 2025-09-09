@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { X, Heart, Minus, Plus } from "lucide-react";
+import Image from "next/image";
 
 const ProductModal = ({ product, isOpen, onClose }) => {
   const [selectedSize, setSelectedSize] = useState("S");
@@ -25,10 +26,13 @@ const ProductModal = ({ product, isOpen, onClose }) => {
             <button className="absolute top-4 right-4 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md z-10">
               <Heart className="w-5 h-5 text-gray-400 hover:text-red-500 transition-colors" />
             </button>
-            <img
+
+            <Image
               src={product.image}
               alt={product.name}
-              className="max-w-full max-h-full object-cover "
+              width={350}
+              height={350}
+              className=" object-cover"
             />
           </div>
 

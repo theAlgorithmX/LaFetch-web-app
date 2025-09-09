@@ -5,6 +5,8 @@ import CategorySection from "../(categorycard)/Categorycard";
 import SimpleCarousel from "../(carousel)/Carousel";
 import FashionGrid from "../(blog)/Blog";
 import Navbar from "@/components/Navbar";
+import TrendingNowSection from "../(trendingnow)/Trendingnow";
+import Footer from "@/components/footer";
 
 const page = () => {
   return (
@@ -13,9 +15,10 @@ const page = () => {
       <HomePage />
       <NewDropsSection />
       <CategorySection />
-      <NewDropsSection />
+      <TrendingNowSection />
       <SimpleCarousel />
       <FashionGrid />
+      <Footer />
     </div>
   );
 };

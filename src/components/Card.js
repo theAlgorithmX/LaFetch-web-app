@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Eye, ShoppingBag, Zap } from "lucide-react";
 import ProductModal from "./Modal";
+import Image from "next/image";
 
 const ProductCard = ({ product }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -10,10 +11,12 @@ const ProductCard = ({ product }) => {
       <div className="relative bg-white overflow-hidden w-[160px] h-[400px] md:w-[300px] md:h-[480px]">
         {/* Product Image */}
         <div className="relative bg-gray-50 overflow-hidden group w-[160px] h-[300px]  md:w-[300px] md:h-[380px]">
-          <img
+          <Image
             src={product.image}
             alt={product.name}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            width={500}
+            height={500}
+            className=" object-cover transition-transform duration-500 group-hover:scale-110"
           />
 
           {/* Action Icons */}
