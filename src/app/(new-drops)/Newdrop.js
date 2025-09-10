@@ -1,72 +1,12 @@
 "use client";
 import ProductCard from "@/components/Card";
 
+import useProducts from "@/hooks/useProducts";
+
 const NewDropsSection = () => {
-  const products = [
-    {
-      id: 1,
-      name: "Brown Velvet Jacket",
-      category: "Tops for Women",
-      price: 1235,
-      image: "/images/sample-product1.png",
-    },
-    {
-      id: 2,
-      name: "Casual Knit Sweater",
-      category: "Tops for Women",
-      price: 1235,
-      image: "/images/sample-product2.png",
-    },
-    {
-      id: 3,
-      name: "Ribbed Tank Top",
-      category: "Tops for Women",
-      price: 1235,
-      image: "/images/sample-product3.png",
-    },
-    {
-      id: 4,
-      name: "Plaid Flannel Shirt",
-      category: "T-Shirt For Men",
-      price: 1235,
-      image: "/images/sample-product1.png",
-    },
-    // {
-    //   id: 5,
-    //   name: "Cotton V-Neck Tee",
-    //   category: "Tops for Women",
-    //   price: 1235,
-    //   image: "/images/sample-product1.png",
-    // },
-    // {
-    //   id: 6,
-    //   name: "Oversized Hoodie",
-    //   category: "T-Shirt For Men",
-    //   price: 1235,
-    //   image: "/images/sample-product1.png",
-    // },
-    // {
-    //   id: 7,
-    //   name: "Silk Blouse",
-    //   category: "Tops for Women",
-    //   price: 1235,
-    //   image: "/images/sample-product1.png",
-    // },
-    // {
-    //   id: 8,
-    //   name: "Denim Jacket",
-    //   category: "T-Shirt For Men",
-    //   price: 1235,
-    //   image: "/images/sample-product1.png",
-    // },
-    // {
-    //   id: 9,
-    //   name: "Denim Jacket",
-    //   category: "T-Shirt For Men",
-    //   price: 1235,
-    //   image: "/images/sample-product1.png",
-    // },
-  ];
+
+  const fetchproducts = useProducts()
+  console.log(fetchproducts, "ASdasdsa")
 
   return (
     <section className="py-16 px-4 bg-white">
@@ -78,7 +18,7 @@ const NewDropsSection = () => {
 
         {/* Products Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3  md:grid-cols-4 gap-[20px] justify-items-center">
-          {products.map((product) => (
+          {fetchproducts?.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>

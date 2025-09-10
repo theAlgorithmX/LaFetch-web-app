@@ -28,8 +28,12 @@ const ProductModal = ({ product, isOpen, onClose }) => {
             </button>
 
             <Image
-              src={product.image}
-              alt={product.name}
+              src={
+                product?.imageUrls
+                  ? product?.imageUrls[0]
+                  : "https://cdn.shopify.com/s/files/1/0553/6186/3863/products/0I1A6958copy-pichi.jpg?v=1617717071"
+              }
+              alt={product?.title || "product-img"}
               width={450}
               height={300}
               className=" object-cover"
@@ -42,11 +46,9 @@ const ProductModal = ({ product, isOpen, onClose }) => {
             <div className="flex items-start justify-between mb-4">
               <div>
                 <h2 className="text-2xl font-semibold text-gray-900 mb-1">
-                  {product.name}
+                  {product.title}
                 </h2>
-                <p className="text-xl text-gray-900">
-                  Rs. {product.price.toLocaleString()}
-                </p>
+                <p className="text-xl text-gray-900">Rs. {product.basePrice}</p>
               </div>
               <button
                 onClick={onClose}
@@ -59,8 +61,7 @@ const ProductModal = ({ product, isOpen, onClose }) => {
             {/* Description */}
             <div className="mb-4">
               <p className="text-gray-600 mb-1 text-sm leading-snug">
-                Lorem Ipsum Dolor Sit Amet, Consectetur Adipiscing Elit, Sed Do
-                Eiusmod Tempor Incididunt
+                {product?.shortDescription}
               </p>
               <button className="text-black font-medium underline text-sm">
                 View More
