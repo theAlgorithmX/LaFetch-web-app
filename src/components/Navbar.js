@@ -108,7 +108,7 @@ const Navbar = () => {
       {/* Sticky Header Container */}
       <div className="sticky top-0 bg-white z-50 shadow-sm">
         {/* Top Section with Logo */}
-        <div className="border-b border-gray-100">
+        <div className="">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center py-4 md:justify-center">
               {/* Hamburger Menu - Mobile Only */}
@@ -164,7 +164,7 @@ const Navbar = () => {
 
                     {/* Unified Dropdown Style */}
                     {activeDropdown === index && (
-                      <div className="absolute -left-5 top-full  w-[800px] bg-white shadow-lg border border-gray-100 z-50">
+                      <div className="absolute -left-5 top-full  w-[700px] bg-white shadow-lg border border-gray-100 z-50">
                         <div className="p-6">
                           <div className="flex justify-between">
                             {/* Menu Sections */}
@@ -221,7 +221,7 @@ const Navbar = () => {
                             </div>
 
                             {/* Product Images */}
-                            <div className="ml-8 flex space-x-4">
+                            <div className="ml-4 flex space-x-4">
                               <div className="w-24 h-32 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
                                 <span className="text-gray-400 text-xs">
                                   Product 1

@@ -7,6 +7,7 @@ import FashionGrid from "../(blog)/Blog";
 import Navbar from "@/components/Navbar";
 import TrendingNowSection from "../(trendingnow)/Trendingnow";
 import Footer from "@/components/footer";
+import PhoneAuthModal from "@/components/LoginModal";
 
 const page = () => {
   return (
@@ -18,6 +19,7 @@ const page = () => {
       <TrendingNowSection />
       <SimpleCarousel />
       <FashionGrid />
+      <PhoneAuthModal />
       <Footer />
     </div>
   );

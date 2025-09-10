@@ -4,9 +4,7 @@ import ProductCard from "@/components/Card";
 import useProducts from "@/hooks/useProducts";
 
 const NewDropsSection = () => {
-
-  const fetchproducts = useProducts()
-  console.log(fetchproducts, "ASdasdsa")
+  const fetchproducts = useProducts();
 
   return (
     <section className="py-16 px-4 bg-white">

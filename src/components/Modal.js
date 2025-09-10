@@ -18,30 +18,31 @@ const ProductModal = ({ product, isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black/30 backdrop-blur-xs flex items-center justify-center z-50 p-4">
-      <div className="bg-white max-w-4xl w-[956px] max-h-[600px]">
+      <div className="bg-white max-w-4xl w-[850px] max-h-[550px]">
         <div className="flex flex-col md:flex-row">
           {/* Product Image */}
-          <div className="md:w-1/2 aspect-square bg-gray-50 relative">
+          <div className="md:w-[45%] aspect-square bg-gray-50 relative">
             {/* Heart Button moved here */}
             <button className="absolute top-4 right-4 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md z-10">
               <Heart className="w-5 h-5 text-gray-400 hover:text-red-500 transition-colors" />
             </button>
 
-            <Image
-              src={
-                product?.imageUrls
-                  ? product?.imageUrls[0]
-                  : "https://cdn.shopify.com/s/files/1/0553/6186/3863/products/0I1A6958copy-pichi.jpg?v=1617717071"
-              }
-              alt={product?.title || "product-img"}
-              width={450}
-              height={300}
-              className=" object-cover"
-            />
+            <div className="w-[400px] ">
+              <Image
+                src={
+                  product?.imageUrls
+                    ? product?.imageUrls[0]
+                    : "https://cdn.shopify.com/s/files/1/0553/6186/3863/products/0I1A6958copy-pichi.jpg?v=1617717071"
+                }
+                alt={product?.title || "product-img"}
+                fill
+                className="   object-fill"
+              />
+            </div>
           </div>
 
           {/* Product Details */}
-          <div className="md:w-1/2 p-6">
+          <div className="md:w-[55%] p-6">
             {/* Header with Close Button */}
             <div className="flex items-start justify-between mb-4">
               <div>
