@@ -239,7 +239,15 @@ const Footer = () => {
             </div>
 
             {/* Logo (Right) */}
-            <div className="text-xl font-bold text-purple-400">LAFETCH</div>
+            <div className="">
+              <Image
+                src="/images/lafetch.png"
+                alt="LAFETCH Logo"
+                width={120} // adjust size
+                height={40}
+                className="object-contain"
+              />
+            </div>
           </div>
         </div>
       </div>

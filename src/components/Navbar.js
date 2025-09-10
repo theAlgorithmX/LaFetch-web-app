@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Search, Heart, ShoppingBag, User, Menu, X } from "lucide-react";
 import Image from "next/image";
 
@@ -85,6 +85,23 @@ const Navbar = () => {
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const searchDropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        searchDropdownRef.current &&
+        !searchDropdownRef.current.contains(event.target)
+      ) {
+        setShowSearchDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
@@ -147,7 +164,7 @@ const Navbar = () => {
 
                     {/* Unified Dropdown Style */}
                     {activeDropdown === index && (
-                      <div className="absolute left-0 top-full mt-1 w-[800px] bg-white shadow-lg border border-gray-100 z-50">
+                      <div className="absolute -left-5 top-full  w-[800px] bg-white shadow-lg border border-gray-100 z-50">
                         <div className="p-6">
                           <div className="flex justify-between">
                             {/* Menu Sections */}
@@ -371,7 +388,10 @@ const Navbar = () => {
 
       {/* Search Dropdown */}
       {showSearchDropdown && (
-        <div className="sticky top-26 bg-white border-b border-gray-200 z-40">
+        <div
+          ref={searchDropdownRef}
+          className="sticky top-26 bg-white border-b border-gray-200 z-40"
+        >
           <div className="px-4 sm:px-6 lg:px-12 py-6">
             {/* Search Bar */}
             <div className="relative mb-6">
@@ -379,7 +399,7 @@ const Navbar = () => {
               <input
                 type="text"
                 placeholder="Search products..."
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-3 border-b text-black border-gray-300 rounded-lg "
               />
             </div>
 

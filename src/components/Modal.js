@@ -18,7 +18,7 @@ const ProductModal = ({ product, isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black/30 backdrop-blur-xs flex items-center justify-center z-50 p-4">
-      <div className="bg-white max-w-4xl w-[956px] max-h-[588px] overflow-y-auto">
+      <div className="bg-white max-w-4xl w-[956px] max-h-[600px]">
         <div className="flex flex-col md:flex-row">
           {/* Product Image */}
           <div className="md:w-1/2 aspect-square bg-gray-50 relative">
@@ -30,8 +30,8 @@ const ProductModal = ({ product, isOpen, onClose }) => {
             <Image
               src={product.image}
               alt={product.name}
-              width={350}
-              height={350}
+              width={450}
+              height={300}
               className=" object-cover"
             />
           </div>
@@ -133,7 +133,7 @@ const ProductModal = ({ product, isOpen, onClose }) => {
 
             {/* Buy Now Button */}
             <div>
-              <button className="w-full bg-black text-white py-2 px-4 rounded-md hover:bg-gray-800 transition-colors font-medium text-sm">
+              <button className="w-[100px] bg-black text-white py-2 px-4 rounded-md transition-colors font-medium text-sm">
                 Buy Now
               </button>
             </div>
