@@ -113,7 +113,7 @@ const Navbar = () => {
             <div className="flex justify-between items-center py-4 md:justify-center">
               {/* Hamburger Menu - Mobile Only */}
               <button
-                className="md:hidden text-gray-500"
+                className="md:hidden text-[#808080]"
                 onClick={() => setIsMobileMenuOpen(true)}
               >
                 <Menu className="w-6 h-6" />
@@ -157,7 +157,7 @@ const Navbar = () => {
                   >
                     <a
                       href="#"
-                      className="text-sm text-gray-500 hover:text-gray-900"
+                      className="text-[13px] text-[#808080] hover:text-gray-900"
                     >
                       {menu.title}
                     </a>
@@ -243,19 +243,19 @@ const Navbar = () => {
                 {/* Additional static menu items */}
                 <a
                   href="#"
-                  className="text-sm text-gray-500 hover:text-gray-900"
+                  className="text-[13px] text-[#808080] hover:text-gray-900"
                 >
                   Most Popular
                 </a>
                 <a
                   href="#"
-                  className="text-sm text-gray-500 hover:text-gray-900"
+                  className="text-[13px] text-[#808080] hover:text-gray-900"
                 >
                   Blogs
                 </a>
                 <a
                   href="#"
-                  className="text-sm text-gray-500 hover:text-gray-900"
+                  className="text-[13px] text-[#808080] hover:text-gray-900"
                 >
                   Track Order
                 </a>
@@ -265,20 +265,20 @@ const Navbar = () => {
               <div className="flex items-center space-x-4">
                 <button
                   onClick={() => setShowSearchDropdown(!showSearchDropdown)}
-                  className="p-2 text-gray-500 hover:text-gray-900"
+                  className="p-2 text-[#808080] hover:text-gray-900"
                 >
                   <Search className="w-5 h-5" />
                 </button>
 
-                <button className="p-2 text-gray-500 hover:text-gray-900">
+                <button className="p-2 text-[#808080] hover:text-gray-900">
                   <Heart className="w-5 h-5" />
                 </button>
 
-                <button className="p-2 text-gray-500 hover:text-gray-900">
+                <button className="p-2 text-[#808080] hover:text-gray-900">
                   <ShoppingBag className="w-5 h-5" />
                 </button>
 
-                <button className="p-2 text-gray-500 hover:text-gray-900">
+                <button className="p-2 text-[#808080] hover:text-gray-900">
                   <User className="w-5 h-5" />
                 </button>
               </div>
@@ -302,7 +302,7 @@ const Navbar = () => {
           <div className="flex items-center justify-between p-4 border-b">
             <h1 className="text-xl font-bold text-gray-900">LaFetch</h1>
             <button
-              className="text-gray-500"
+              className="text-[#808080]"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               <X className="w-6 h-6" />
@@ -368,16 +368,16 @@ const Navbar = () => {
             {/* Mobile Icons */}
             <div className="fixed bottom-0 left-0 w-full border-t bg-white p-4">
               <div className="flex justify-around">
-                <button className="p-2 text-gray-500">
+                <button className="p-2 text-[#808080]">
                   <Search className="w-5 h-5" />
                 </button>
-                <button className="p-2 text-gray-500">
+                <button className="p-2 text-[#808080]">
                   <Heart className="w-5 h-5" />
                 </button>
-                <button className="p-2 text-gray-500">
+                <button className="p-2 text-[#808080]">
                   <ShoppingBag className="w-5 h-5" />
                 </button>
-                <button className="p-2 text-gray-500">
+                <button className="p-2 text-[#808080]">
                   <User className="w-5 h-5" />
                 </button>
               </div>
@@ -403,7 +403,7 @@ const Navbar = () => {
               />
             </div>
 
-            <div className="flex items-start max-w-[500px]">
+            <div className="flex items-start max-w-[600px]">
               {/* Left Side - Suggestions */}
               <div className="flex-1 pr-8">
                 <h3 className="font-semibold text-gray-900 mb-4">

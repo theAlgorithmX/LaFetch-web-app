@@ -2,12 +2,13 @@ import React from "react";
 import NewDropsSection from "../(new-drops)/Newdrop";
 import HomePage from "../(banner)/Banner";
 import CategorySection from "../(categorycard)/Categorycard";
-import SimpleCarousel from "../(carousel)/Carousel";
 import FashionGrid from "../(blog)/Blog";
 import Navbar from "@/components/Navbar";
 import TrendingNowSection from "../(trendingnow)/Trendingnow";
 import Footer from "@/components/footer";
 import PhoneAuthModal from "@/components/LoginModal";
+import HomeCarousel from "../(carousel)/Carousel";
+import TrendingBlog from "../(blog)/Blog";
 
 const page = () => {
   return (
@@ -17,8 +18,8 @@ const page = () => {
       <NewDropsSection />
       <CategorySection />
       <TrendingNowSection />
-      <SimpleCarousel />
-      <FashionGrid />
+      <HomeCarousel />
+      <TrendingBlog />
       <PhoneAuthModal />
       <Footer />
     </div>

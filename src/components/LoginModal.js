@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import { X, Phone, Shield } from "lucide-react";
-import axiosHttp from "@/utils/axioshttp";
-import { endPoints } from "@/utils/endpoints";
-import { Toaster, toast } from "react-hot-toast"; // Update this import
 import Image from "next/image";
+import { endPoints } from "@/utils/endpoints";
+import axiosHttp from "@/utils/axioshttp";
+import { Toaster, toast } from "react-hot-toast";
 
 const PhoneAuthModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,10 +12,17 @@ const PhoneAuthModal = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [otp, setOtp] = useState(["", "", "", ""]);
   const [loading, setLoading] = useState(false);
+  // Updated state for step 3 form data
+  const [userDetails, setUserDetails] = useState({
+    name: "",
+    email: "",
+    gender: "",
+  });
 
   const authendPoint = `${endPoints.auth}`;
   const verifyOtpendPoint = `${endPoints.verifyOtp}`;
   const resendOtpendPoint = `${endPoints.resendOtp}`;
+  const signUpUser = `${endPoints.updateUser}`; //put
 
   const handlePhoneSubmit = async () => {
     if (!phoneNumber || phoneNumber.length < 10) {
@@ -28,11 +35,11 @@ const PhoneAuthModal = () => {
       const response = await axiosHttp.post(authendPoint, {
         phone: phoneNumber,
       });
-      console.log(response, "relekm");
+
       if (response.status === 200) {
         setCurrentStep("otp");
         const successMessage = response?.data?.message;
-        console.log(successMessage, "jksjdk");
+
         toast.success(successMessage || "OTP sent successfully");
       }
     } catch (error) {
@@ -72,15 +79,50 @@ const PhoneAuthModal = () => {
       });
 
       if (response.status === 200) {
-        toast.success("Successfully logged in!");
-        setIsOpen(false);
-        setCurrentStep("phone");
-        setPhoneNumber("");
-        setOtp(["", "", "", ""]);
+        toast.success("OTP verified successfully!");
+        localStorage.setItem("userPhone", phoneNumber); // store for next step
+        setCurrentStep("details");
       }
     } catch (error) {
       const errorMessage = error.response?.data?.message || "Invalid OTP";
       toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Updated function to handle step 3 form submission with API call
+  const handleDetailsSubmit = async () => {
+    if (!userDetails.name || !userDetails.email || !userDetails.gender) {
+      alert("Please fill all required fields");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      // Get phone number from localStorage
+      const storedPhone = localStorage.getItem("userPhone");
+
+      const formData = {
+        fullName: userDetails.name,
+        email: userDetails.email,
+        gender: userDetails.gender,
+        type: "signup",
+        phone: storedPhone || `+91${phoneNumber}`, // fallback to current phoneNumber if not in localStorage
+      };
+
+      const res = await axiosHttp.put(signUpUser, formData);
+
+      if (res.status === 200) {
+        console.log("Signup successful:", res.data);
+        setCurrentStep("welcome");
+      } else {
+        alert(`Signup failed: ${res.data?.message || "Please try again"}`);
+      }
+    } catch (error) {
+      console.error("Error during signup:", error);
+      alert("Network error. Please check your connection and try again.");
     } finally {
       setLoading(false);
     }
@@ -99,18 +141,19 @@ const PhoneAuthModal = () => {
       setLoading(false);
     }
   };
+
   const closeModal = () => {
     setIsOpen(false);
     setCurrentStep("phone");
     setPhoneNumber("");
     setOtp(["", "", "", ""]);
+    setUserDetails({ name: "", email: "", gender: "" });
   };
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       {/* Add Toaster component */}
       <Toaster position="top-center" />
-
       {/* Demo Button */}
       <button
         onClick={() => setIsOpen(true)}
@@ -122,39 +165,64 @@ const PhoneAuthModal = () => {
       {/* Modal Overlay */}
       {isOpen && (
         <div className="fixed inset-0 bg-black/10 backdrop-blur-xs bg-opacity-50 flex items-center justify-center z-80">
-          <div className="bg-white  shadow-xl max-w-4xl w-full max-h-[600px] flex overflow-hidden">
+          <div className="bg-white shadow-xl max-w-4xl w-full max-h-[600px] flex overflow-hidden">
             {/* Left Side - Image */}
             <div className="w-1/2 bg-black flex items-center justify-center relative">
-              {/* LaFetch Logo */}
-              <div className="absolute top-8 left-8">
-                <Image
-                  src="/images/logo-white.png" // ⬅️ put your logo file in /public
-                  alt="LaFetch Logo"
-                  width={120} // adjust size
-                  height={40}
-                  className="object-contain"
-                />
-              </div>
-              {/* Replace Mock Mobile Screenshots with Next.js Image */}
-              <div className="flex gap-6 mt-[70px]">
-                <Image
-                  src="/images/iphone-login.png"
-                  alt="App preview"
-                  width={350}
-                  height={0}
-                  className="rounded-3xl shadow-lg"
-                />
-              </div>
+              {/* LaFetch Logo - Only show on steps 1-3 */}
+              {currentStep !== "welcome" && (
+                <div className="absolute top-0 left-8 pt-[10px]">
+                  <Image
+                    src="/images/logo-white.png"
+                    alt="LaFetch Logo"
+                    width={120}
+                    height={40}
+                    className="object-contain"
+                  />
+                </div>
+              )}
+
+              {/* Conditional content based on step */}
+              {currentStep === "welcome" ? (
+                // Step 4 - Welcome screen content
+                <div className="flex flex-col items-center justify-center text-center text-white">
+                  <Image
+                    src="/images/iphone-login.png"
+                    alt="Phone"
+                    width={350}
+                    height={0}
+                    className="object-contain "
+                  />
+                </div>
+              ) : (
+                // Steps 1, 2, 3 - Mobile screenshots
+                <div className="flex gap-6 mt-[50px]">
+                  <Image
+                    src="/images/iphone-login.png"
+                    alt="App preview"
+                    width={350}
+                    height={0}
+                    className="rounded-3xl shadow-lg"
+                  />
+                </div>
+              )}
             </div>
+
             {/* Right Side - Form */}
-            <div className="w-1/2 p-8 flex flex-col justify-center relative">
+            <div
+              className={`w-1/2 p-8 flex flex-col justify-center relative ${
+                currentStep === "welcome" ? "bg-black" : "bg-white"
+              }`}
+            >
               {/* Close Button inside right side */}
               <button
                 onClick={closeModal}
-                className="absolute top-4 right-4 text-black hover:text-gray-600"
+                className={`absolute top-4 right-4 hover:opacity-60 cursor-pointer ${
+                  currentStep === "welcome" ? "text-white" : "text-black"
+                }`}
               >
                 <X size={24} />
               </button>
+
               {currentStep === "phone" ? (
                 // Phone Number Step
                 <>
@@ -184,7 +252,7 @@ const PhoneAuthModal = () => {
                           placeholder="1234567890"
                           className="flex-1 px-3 py-2 border border-gray-300 rounded-r-md 
              focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent 
-             placeholder-gray-400 text-black" // ⬅️ added here
+             placeholder-gray-400 text-black"
                           maxLength="10"
                         />
                       </div>
@@ -198,45 +266,29 @@ const PhoneAuthModal = () => {
                       {loading ? "Sending..." : "Continue"}
                     </button>
 
-                    {/* <div className="text-center">
-                      <span className="text-black">Or</span>
-                    </div>
-
-                    <button className="w-full border border-gray-300 py-3 rounded-md font-medium hover:bg-gray-50 transition-colors flex items-center justify-center">
-                      <div className="w-5 h-5 mr-2">
-                        <svg viewBox="0 0 24 24">
-                          <path
-                            fill="#4285F4"
-                            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                          />
-                          <path
-                            fill="#34A853"
-                            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                          />
-                          <path
-                            fill="#FBBC05"
-                            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                          />
-                          <path
-                            fill="#EA4335"
-                            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                          />
-                        </svg>
-                      </div>
-                      <span className="text-black">Sign in with Google</span>
-                    </button> */}
-
-                    <p className="text-xs text-black text-center">
+                    <p className="text-sm text-black text-center">
                       By continuing, you agree to Lafetch's{" "}
-                      <span className="underline">Terms & Conditions</span> and{" "}
-                      <span className="underline">Privacy Policy</span>
+                      <span className="underline font-[700]">
+                        Terms & Conditions
+                      </span>{" "}
+                      and{" "}
+                      <span className="underline font-[700]">
+                        Privacy Policy
+                      </span>
                     </p>
                   </div>
                 </>
-              ) : (
+              ) : currentStep === "otp" ? (
                 // OTP Verification Step
                 <>
                   <div className="text-center mb-8">
+                    {/* Back button moved to step 2 */}
+                    <button
+                      onClick={() => setCurrentStep("phone")}
+                      className="absolute top-4 left-4 text-black hover:text-gray-600"
+                    >
+                      ←
+                    </button>
                     <h2 className="text-2xl font-bold text-black mb-2">
                       Verify your Mobile Number
                     </h2>
@@ -296,6 +348,122 @@ const PhoneAuthModal = () => {
                     >
                       {loading ? "Verifying..." : "Continue"}
                     </button>
+                  </div>
+                </>
+              ) : currentStep === "details" ? (
+                // Step 3 - User Details Form (Back button removed)
+                <>
+                  <div className="text-center mb-8">
+                    <h2 className="text-2xl font-bold text-black mb-2">
+                      ONE LAST STEP!
+                    </h2>
+                    <p className="text-black">
+                      Let's get to know you a bit more.
+                    </p>
+                  </div>
+
+                  <div className="space-y-6">
+                    <div>
+                      <label className="block text-sm font-medium text-black mb-2">
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        value={userDetails.name}
+                        onChange={(e) =>
+                          setUserDetails({
+                            ...userDetails,
+                            name: e.target.value,
+                          })
+                        }
+                        placeholder="Write your name"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50
+                                 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent 
+                                 placeholder-gray-400 text-black"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-black mb-2">
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        value={userDetails.email}
+                        onChange={(e) =>
+                          setUserDetails({
+                            ...userDetails,
+                            email: e.target.value,
+                          })
+                        }
+                        placeholder="Write your email"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50
+                                 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent 
+                                 placeholder-gray-400 text-black"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-black mb-2">
+                        Gender
+                      </label>
+                      <select
+                        value={userDetails.gender}
+                        onChange={(e) =>
+                          setUserDetails({
+                            ...userDetails,
+                            gender: e.target.value,
+                          })
+                        }
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50
+                                 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent 
+                                 text-black"
+                      >
+                        <option value="">Select your gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                      </select>
+                    </div>
+
+                    <button
+                      onClick={handleDetailsSubmit}
+                      disabled={loading}
+                      className="w-full bg-black text-white py-3 rounded-md font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                      {loading ? "Creating Account..." : "Continue"}
+                    </button>
+                  </div>
+                </>
+              ) : (
+                // Step 4 - Welcome Screen with Black Background
+                <>
+                  <div className="text-center text-white h-full flex flex-col justify-between">
+                    <div className="flex-1 flex flex-col justify-center">
+                      <h2 className="text-2xl font-bold mb-4">
+                        Welcome to LaFetch!
+                      </h2>
+                      <p className="mb-8">
+                        You're all set! Start exploring amazing fashion deals.
+                      </p>
+                      <button
+                        onClick={closeModal}
+                        className="w-full bg-white text-black py-3 rounded-md font-medium cursor-pointer transition-colors hover:bg-gray-100"
+                      >
+                        Get Started
+                      </button>
+                    </div>
+
+                    {/* Logo at bottom for welcome screen */}
+                    <div className="mt-8 flex justify-center">
+                      <Image
+                        src="/images/logo-purple.png"
+                        alt="LaFetch Logo"
+                        width={120}
+                        height={40}
+                        className="object-contain"
+                      />
+                    </div>
                   </div>
                 </>
               )}

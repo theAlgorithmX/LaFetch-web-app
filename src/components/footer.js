@@ -189,40 +189,68 @@ const Footer = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Write your email here"
-                    className="w-full px-4 py-3 bg-gray-800  rounded-full text-white placeholder-gray-400 focus:outline-none focus:border-gray-400 text-sm"
+                    className="w-[250px] px-4 py-3 bg-[#333333] rounded-full text-white placeholder-[#B3B3B3] focus:outline-none focus:border-gray-400 text-sm"
                   />
                 </div>
               </div>
 
               {/* Social Media Icons */}
-              <div className="flex space-x-4 mt-14 ">
+
+              <div className="flex space-x-4 mt-14 justify-end">
                 <a
                   href="#"
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="hover:opacity-80 transition-opacity"
                   aria-label="Instagram"
                 >
-                  <Instagram className="w-5 h-5" />
+                  <Image
+                    src="/icons/instagram.png"
+                    alt="Instagram"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5"
+                  />
                 </a>
+
                 <a
                   href="#"
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="hover:opacity-80 transition-opacity"
                   aria-label="Twitter"
                 >
-                  <Twitter className="w-5 h-5" />
+                  <Image
+                    src="/icons/twitter.png"
+                    alt="Twitter"
+                    width={15}
+                    height={15}
+                    className="mt-[3px]"
+                  />
                 </a>
+
                 <a
                   href="#"
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="hover:opacity-80 transition-opacity"
                   aria-label="Facebook"
                 >
-                  <Facebook className="w-5 h-5" />
+                  <Image
+                    src="/icons/meta.png"
+                    alt="Facebook"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5"
+                  />
                 </a>
+
                 <a
                   href="#"
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="hover:opacity-80 transition-opacity"
                   aria-label="WhatsApp"
                 >
-                  <MessageCircle className="w-5 h-5" />
+                  <Image
+                    src="/icons/whatsapp.png"
+                    alt="WhatsApp"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5"
+                  />
                 </a>
               </div>
             </div>
@@ -230,7 +258,7 @@ const Footer = () => {
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-gray-800 pt-8">
+        <div className="border-t border-[#60606080] pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             {/* Copyright */}
             <div className="text-gray-400 text-sm">
