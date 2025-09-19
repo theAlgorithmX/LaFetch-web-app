@@ -3,6 +3,8 @@
 import { useState, useRef, useEffect } from "react";
 import { Search, Heart, ShoppingBag, User, Menu, X } from "lucide-react";
 import Image from "next/image";
+import PhoneAuthModal from "@/components/LoginModal";
+import { useSelector } from "react-redux";
 
 // Sample menu data for demonstration
 const menuData = [
@@ -82,10 +84,13 @@ const menuData = [
 ];
 
 const Navbar = () => {
+  const user = useSelector((state) => state.user.userInfo);
+  console.log("User info from Redux:", user);
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const searchDropdownRef = useRef(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -278,9 +283,18 @@ const Navbar = () => {
                   <ShoppingBag className="w-5 h-5" />
                 </button>
 
-                <button className="p-2 text-[#808080] hover:text-gray-900">
-                  <User className="w-5 h-5" />
-                </button>
+                {user ? (
+                  <span className="text-black font-medium">
+                    {user.fullName}
+                  </span>
+                ) : (
+                  <button
+                    onClick={() => setIsModalOpen(true)}
+                    className="p-2 text-[#808080] hover:text-gray-900 cursor-pointer"
+                  >
+                    <User className="w-5 h-5" />
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -491,6 +505,7 @@ const Navbar = () => {
           </div>
         </div>
       )}
+      <PhoneAuthModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
     </>
   );
 };

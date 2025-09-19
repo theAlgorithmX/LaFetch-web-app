@@ -6,7 +6,7 @@ import MenBanner from "./LandingMenBanner";
 import MenNewInSection from "./MenNewIn";
 import MenShopCategories from "./MenShopCategories";
 import MenCollectionSection from "./MenCollections";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/app/(navbar)/Navbar";
 import MenCarousel from "./MenCarousel";
 import TrendingBlog from "@/app/(blog)/Blog";
 

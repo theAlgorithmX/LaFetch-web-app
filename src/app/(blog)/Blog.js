@@ -13,8 +13,6 @@ const TrendingBlog = () => {
     }
   }, [fetchBlogs]);
 
-  console.log(fetchBlogs, "fetchBlog");
-
   const data =
     fetchBlogs?.map((blog, index) => ({
       id: blog.id || index,
@@ -33,7 +31,7 @@ const TrendingBlog = () => {
     );
   }
 
-  return <FashionGrid data={data} title="LATEST FASHION TRENDS" />;
+  return <FashionGrid data={data} title="TRENDING NOW " />;
 };
 
 export default TrendingBlog;

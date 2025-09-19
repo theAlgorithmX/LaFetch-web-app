@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 
 const CategoryCard = ({ title, backgroundImage, href = "#" }) => {
   return (
-    <div className="relative group overflow-hidden cursor-pointer h-[656px]">
+    <div className="relative group overflow-hidden cursor-pointer h-[400px] md:h-[656px]">
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-105"
@@ -14,7 +14,7 @@ const CategoryCard = ({ title, backgroundImage, href = "#" }) => {
       {/* Content */}
       <div className="relative z-10 h-full flex flex-col justify-end p-8">
         <div className="flex items-center justify-between">
-          <h3 className="text-white text-3xl font-light tracking-wider">
+          <h3 className="text-white text-3xl font-light tracking-wider pb-[20px] md:pb-[0]">
             <span className="group-hover:underline transition-all duration-300">
               {title}
             </span>

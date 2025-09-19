@@ -1,23 +1,21 @@
-"use client";
 import { createSlice } from "@reduxjs/toolkit";
+
+const initialState = {
+  userInfo: null,
+};
 
 const userSlice = createSlice({
   name: "user",
-  initialState: {
-    isLoggedIn: false,
-    profile: null,
-  },
+  initialState,
   reducers: {
-    login: (state, action) => {
-      state.isLoggedIn = true;
-      state.profile = action.payload;
+    setUser: (state, action) => {
+      state.userInfo = action.payload;
     },
-    logout: (state) => {
-      state.isLoggedIn = false;
-      state.profile = null;
+    clearUser: (state) => {
+      state.userInfo = null;
     },
   },
 });
 
-export const { login, logout } = userSlice.actions;
+export const { setUser, clearUser } = userSlice.actions;
 export default userSlice.reducer;

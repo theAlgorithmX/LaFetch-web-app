@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import useCategories from "@/hooks/useCategories";
+import Image from "next/image";
 
 const AccessoriesShopCategories = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -40,9 +41,11 @@ const AccessoriesShopCategories = () => {
                 <div key={category.id} className="flex flex-col items-center">
                   <div className="relative group cursor-pointer transform transition-transform duration-300">
                     <div className=" w-[120px] h-[120px] md:w-[195px] md:h-[195px] rounded-full overflow-hidden bg-gray-100">
-                      <img
+                      <Image
                         src={category.image || "/placeholder.png"}
                         alt={category.name}
+                        width={300}
+                        height={300}
                         className="w-full h-full object-cover group-hover:scale-120 transition-transform duration-500"
                         loading="lazy"
                       />

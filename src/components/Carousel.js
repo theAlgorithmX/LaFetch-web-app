@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
 
 const BannerCarousel = ({ slides }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -29,9 +30,9 @@ const BannerCarousel = ({ slides }) => {
   };
 
   return (
-    <div className="w-full bg-white relative min-h-[50vh] md:min-h-[60vh] lg:min-h-screen">
+    <div className="w-full bg-white relative pt-[50px] md:min-h-[60vh] lg:min-h-screen">
       <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden">
+        <div className="relative h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden">
           {slides.map((slide, index) => (
             <div
               key={index}
@@ -45,10 +46,12 @@ const BannerCarousel = ({ slides }) => {
                   : "opacity-0 translate-x-full"
               }`}
             >
-              <img
+              <Image
                 src={slide.image}
                 alt={`Slide ${index + 1}`}
-                className="w-full h-full object-cover rounded-lg"
+                width={1400}
+                height={600}
+                className=" object-cover rounded-lg"
                 loading="lazy"
               />
             </div>

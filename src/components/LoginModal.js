@@ -6,9 +6,13 @@ import { endPoints } from "@/utils/endpoints";
 import axiosHttp from "@/utils/axioshttp";
 import { Toaster, toast } from "react-hot-toast";
 
-const PhoneAuthModal = () => {
-  const [isOpen, setIsOpen] = useState(false);
+import { useDispatch } from "react-redux";
+import { setUser } from "@/redux/slices/userSlice";
+
+const PhoneAuthModal = ({ isOpen, setIsOpen }) => {
+  const dispatch = useDispatch(); // ✅ Initialize dispatch
   const [currentStep, setCurrentStep] = useState("phone");
+  const [authType, setAuthType] = useState("login"); // "login" or "signup"
   const [phoneNumber, setPhoneNumber] = useState("");
   const [otp, setOtp] = useState(["", "", "", ""]);
   const [loading, setLoading] = useState(false);
@@ -19,10 +23,10 @@ const PhoneAuthModal = () => {
     gender: "",
   });
 
-  const authendPoint = `${endPoints.auth}`;
+  const signUpEndPoint = `${endPoints.auth}`; // For "I'm New Here" - signup
+  const signInEndPoint = `${endPoints.signin}`; // For "Sign In" - login
   const verifyOtpendPoint = `${endPoints.verifyOtp}`;
   const resendOtpendPoint = `${endPoints.resendOtp}`;
-  const signUpUser = `${endPoints.updateUser}`; //put
 
   const handlePhoneSubmit = async () => {
     if (!phoneNumber || phoneNumber.length < 10) {
@@ -32,7 +36,10 @@ const PhoneAuthModal = () => {
 
     setLoading(true);
     try {
-      const response = await axiosHttp.post(authendPoint, {
+      // Use different endpoints based on auth type
+      const endpoint = authType === "login" ? signInEndPoint : signUpEndPoint;
+
+      const response = await axiosHttp.post(endpoint, {
         phone: phoneNumber,
       });
 
@@ -50,6 +57,7 @@ const PhoneAuthModal = () => {
       setLoading(false);
     }
   };
+
   const handleOtpChange = (index, value) => {
     if (!/^[0-9]?$/.test(value)) return; // ⬅️ Only allow digits
 
@@ -73,25 +81,35 @@ const PhoneAuthModal = () => {
 
     setLoading(true);
     try {
-      const response = await axiosHttp.post(verifyOtpendPoint, {
-        phone: phoneNumber,
-        otp: otpString,
-      });
+      const requestData = { phone: phoneNumber, otp: otpString };
+      if (authType === "login") requestData.type = "login";
 
-      if (response.status === 200) {
-        toast.success("OTP verified successfully!");
-        localStorage.setItem("userPhone", phoneNumber); // store for next step
-        setCurrentStep("details");
+      const response = await axiosHttp.post(verifyOtpendPoint, requestData);
+
+      // Use response.data.status for OTP verification
+      if (response.data?.status === 200) {
+        toast.success(response.data.message || "OTP verified successfully!");
+
+        localStorage.setItem("userPhone", phoneNumber);
+
+        if (authType === "login") {
+          dispatch(setUser(response.data.data));
+          setCurrentStep("welcome");
+        } else {
+          setCurrentStep("details");
+        }
+      } else {
+        // If backend returns 200 HTTP but status != 200 in body
+        toast.error(response.data?.message || "Invalid OTP");
       }
     } catch (error) {
-      const errorMessage = error.response?.data?.message || "Invalid OTP";
-      toast.error(errorMessage);
+      toast.error(error.response?.data?.message || "Invalid OTP");
     } finally {
       setLoading(false);
     }
   };
 
-  // Updated function to handle step 3 form submission with API call
+  // Updated function to handle step 3 form submission with API call (only for signup)
   const handleDetailsSubmit = async () => {
     if (!userDetails.name || !userDetails.email || !userDetails.gender) {
       alert("Please fill all required fields");
@@ -112,7 +130,8 @@ const PhoneAuthModal = () => {
         phone: storedPhone || `+91${phoneNumber}`, // fallback to current phoneNumber if not in localStorage
       };
 
-      const res = await axiosHttp.put(signUpUser, formData);
+      // Use signup endpoint for user details submission
+      const res = await axiosHttp.put(signUpEndPoint, formData);
 
       if (res.status === 200) {
         console.log("Signup successful:", res.data);
@@ -145,22 +164,24 @@ const PhoneAuthModal = () => {
   const closeModal = () => {
     setIsOpen(false);
     setCurrentStep("phone");
+    setAuthType("login");
+    setPhoneNumber("");
+    setOtp(["", "", "", ""]);
+    setUserDetails({ name: "", email: "", gender: "" });
+  };
+
+  const handleAuthTypeChange = (type) => {
+    setAuthType(type);
+    // Reset form when switching auth types
     setPhoneNumber("");
     setOtp(["", "", "", ""]);
     setUserDetails({ name: "", email: "", gender: "" });
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+    <div className=" flex items-center justify-center">
       {/* Add Toaster component */}
       <Toaster position="top-center" />
-      {/* Demo Button */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className="bg-black text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors"
-      >
-        Open Authentication Modal
-      </button>
 
       {/* Modal Overlay */}
       {isOpen && (
@@ -224,15 +245,41 @@ const PhoneAuthModal = () => {
               </button>
 
               {currentStep === "phone" ? (
-                // Phone Number Step
+                // Phone Number Step with Auth Type Toggle
                 <>
-                  <div className="text-center mb-8">
+                  <div className="text-center mt-8">
                     <h2 className="text-2xl font-bold text-black mb-2">
                       Continue with Mobile Number
                     </h2>
                     <p className="text-black">
                       Be part of the Exciting Discounts — Join us today!
                     </p>
+
+                    {/* Auth Type Toggle */}
+                    <div className="flex justify-center mb-6">
+                      <div className="flex  rounded-lg p-1 ">
+                        <button
+                          onClick={() => handleAuthTypeChange("login")}
+                          className={`px-6 py-2  font-medium transition-colors cursor-pointer ${
+                            authType === "login"
+                              ? "border-b-[2px] border-black text-black "
+                              : "text-black hover:text-gray-700"
+                          }`}
+                        >
+                          SIGN IN
+                        </button>
+                        <button
+                          onClick={() => handleAuthTypeChange("signup")}
+                          className={`px-6 py-2 font-medium transition-colors cursor-pointer ${
+                            authType === "signup"
+                              ? "border-b-[2px] border-black text-black"
+                              : "text-black hover:text-gray-700"
+                          }`}
+                        >
+                          I'M NEW HERE
+                        </button>
+                      </div>
+                    </div>
                   </div>
 
                   <div className="space-y-6">
@@ -263,7 +310,11 @@ const PhoneAuthModal = () => {
                       disabled={loading}
                       className="w-full bg-black text-white py-3 rounded-md font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
-                      {loading ? "Sending..." : "Continue"}
+                      {loading
+                        ? "Sending..."
+                        : authType === "login"
+                        ? "Sign In"
+                        : "Sign Up"}
                     </button>
 
                     <p className="text-sm text-black text-center">
@@ -351,7 +402,7 @@ const PhoneAuthModal = () => {
                   </div>
                 </>
               ) : currentStep === "details" ? (
-                // Step 3 - User Details Form (Back button removed)
+                // Step 3 - User Details Form (Only shown for signup)
                 <>
                   <div className="text-center mb-8">
                     <h2 className="text-2xl font-bold text-black mb-2">
@@ -441,10 +492,14 @@ const PhoneAuthModal = () => {
                   <div className="text-center text-white h-full flex flex-col justify-between">
                     <div className="flex-1 flex flex-col justify-center">
                       <h2 className="text-2xl font-bold mb-4">
-                        Welcome to LaFetch!
+                        {authType === "login"
+                          ? "Welcome Back!"
+                          : "Welcome to LaFetch!"}
                       </h2>
                       <p className="mb-8">
-                        You're all set! Start exploring amazing fashion deals.
+                        {authType === "login"
+                          ? "Great to see you again! Continue exploring amazing fashion deals."
+                          : "You're all set! Start exploring amazing fashion deals."}
                       </p>
                       <button
                         onClick={closeModal}
